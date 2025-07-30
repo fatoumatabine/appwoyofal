@@ -6,7 +6,7 @@ $routes = [
 
     // Routes Logging
     [
-        'path' => '/api/v1/loggings',
+    'path' => ' ',
         'controller' => 'Src\\Controller\\LoggingController',
         'action' => 'index',
         'methods' => ['GET'],

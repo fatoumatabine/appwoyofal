@@ -17,14 +17,14 @@ class LoggingRepository implements ILoggingRepository
         $this->pdo = Database::getInstance();
     }
 
-    public function findAll(array $filter): array
-    {
-        $query = "select * from {$this->table} limit :limit";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->bindValue(':limit', $filter['limit'], PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    // public function findAll(array $filter): array
+    // {
+    //     $query = "select * from {$this->table} limit :limit";
+    //     $stmt = $this->pdo->prepare($query);
+    //     $stmt->bindValue(':limit', $filter['limit'], PDO::PARAM_INT);
+    //     $stmt->execute();
+    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // }
 
     public function insert($entity): ?int
     {
@@ -45,15 +45,38 @@ class LoggingRepository implements ILoggingRepository
         $stmt = $this->pdo->prepare("SELECT * FROM logging WHERE id = :id");
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $data ? new Logging($data) : null;
+        return $data ? new Logging(
+            $data['id'],
+            isset($data['date_heure']) ? new \DateTime($data['date_heure']) : null,
+            $data['localisation'] ?? '',
+            null, // statut à adapter si besoin
+            $data['coderecharge'] ?? '',
+            isset($data['nombrekilowatt']) ? (float)$data['nombrekilowatt'] : 0.0
+        ) : null;
     }
 
-    public function findAll(): array
+    public function findAll(array $filters = []): array
     {
-        $stmt = $this->pdo->query("SELECT * FROM logging");
+        $sql = "SELECT * FROM logging";
+        if (isset($filters['limit'])) {
+            $sql .= " LIMIT :limit";
+        }
+        $stmt = $this->pdo->prepare($sql);
+        if (isset($filters['limit'])) {
+            $stmt->bindValue(':limit', $filters['limit'], PDO::PARAM_INT);
+        }
+        $stmt->execute();
         $logs = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $logs[] = new Logging($data);
+            // Adapter ici selon le constructeur Logging
+            $logs[] = new Logging(
+                $data['id'],
+                isset($data['date_heure']) ? new \DateTime($data['date_heure']) : null,
+                $data['localisation'] ?? '',
+                null, // statut à adapter si besoin
+                $data['coderecharge'] ?? '',
+                isset($data['nombrekilowatt']) ? (float)$data['nombrekilowatt'] : 0.0
+            );
         }
         return $logs;
     }

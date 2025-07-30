@@ -18,7 +18,15 @@ class AchatRepository
         $stmt = $this->db->prepare("SELECT * FROM achat WHERE id = :id");
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $data ? new Achat($data) : null;
+        return $data ? new Achat(
+            $data['id'],
+            $data['reference'],
+            $data['coderecharge'],
+            $data['nombrekilowatt'],
+            $data['date_heure'],
+            $data['prixkw'],
+            $data['compteur']
+        ) : null;
     }
 
     public function findAll(): array
@@ -26,7 +34,15 @@ class AchatRepository
         $stmt = $this->db->query("SELECT * FROM achat");
         $achats = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $achats[] = new Achat($data);
+            $achats[] = new Achat(
+                $data['id'],
+                $data['reference'],
+                $data['coderecharge'],
+                $data['nombrekilowatt'],
+                $data['date_heure'],
+                $data['prixkw'],
+                $data['compteur']
+            );
         }
         return $achats;
     }

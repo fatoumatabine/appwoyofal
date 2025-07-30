@@ -22,9 +22,9 @@ define('DB_USER_MYSQL', $_ENV['DB_USER_MYSQL'] ?? '');
 define('DB_PASS_MYSQL', $_ENV['DB_PASS_MYSQL'] ?? '');
 
 
-// Cloudinary
-define('CLOUDINARY_CLOUD_NAME', $_ENV['CLOUDINARY_CLOUD_NAME']);
-define('CLOUDINARY_API_KEY', $_ENV['CLOUDINARY_API_KEY']);
-define('CLOUDINARY_API_SECRET', $_ENV['CLOUDINARY_API_SECRET']);
+// // Cloudinary
+// define('CLOUDINARY_CLOUD_NAME', $_ENV['CLOUDINARY_CLOUD_NAME']);
+// define('CLOUDINARY_API_KEY', $_ENV['CLOUDINARY_API_KEY']);
+// define('CLOUDINARY_API_SECRET', $_ENV['CLOUDINARY_API_SECRET']);
 
 define('UPLOAD_DIR', $_ENV['UPLOAD_DIR'] ?? 'images/uploads/');
